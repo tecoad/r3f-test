@@ -30,7 +30,7 @@ export function PersistentScrollScene({
 }) {
 	return (
 		// Id: when added blue mesh does not appear
-		<UseCanvas dispose={false}>
+		<UseCanvas dispose={false} id={id}>
 			<ScrollScene track={track}>
 				{(props) => (
 					<mesh {...props}>
