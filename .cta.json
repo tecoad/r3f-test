@@ -1,0 +1,11 @@
+{
+  "projectName": "r3f-test",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": false,
+  "packageManager": "bun",
+  "git": true,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": []
+}
