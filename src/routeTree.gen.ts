@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PagecRouteImport } from './routes/pagec'
 import { Route as PagebRouteImport } from './routes/pageb'
 import { Route as IndexRouteImport } from './routes/index'
 
+const PagecRoute = PagecRouteImport.update({
+  id: '/pagec',
+  path: '/pagec',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PagebRoute = PagebRouteImport.update({
   id: '/pageb',
   path: '/pageb',
@@ -26,31 +32,42 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pageb': typeof PagebRoute
+  '/pagec': typeof PagecRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pageb': typeof PagebRoute
+  '/pagec': typeof PagecRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/pageb': typeof PagebRoute
+  '/pagec': typeof PagecRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pageb'
+  fullPaths: '/' | '/pageb' | '/pagec'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pageb'
-  id: '__root__' | '/' | '/pageb'
+  to: '/' | '/pageb' | '/pagec'
+  id: '__root__' | '/' | '/pageb' | '/pagec'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PagebRoute: typeof PagebRoute
+  PagecRoute: typeof PagecRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pagec': {
+      id: '/pagec'
+      path: '/pagec'
+      fullPath: '/pagec'
+      preLoaderRoute: typeof PagecRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pageb': {
       id: '/pageb'
       path: '/pageb'
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PagebRoute: PagebRoute,
+  PagecRoute: PagecRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

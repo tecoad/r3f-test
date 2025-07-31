@@ -5,7 +5,7 @@ import {
 	useRouter,
 } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/pageb")({
+export const Route = createFileRoute("/pagec")({
 	component: RouteComponent,
 });
 
@@ -31,7 +31,7 @@ function RouteComponent() {
 				Return
 			</button>
 
-			<AnimatedElement id="pageb-element" className="w-lg h-80" />
+			<AnimatedElement id="pagec-element" className="w-lg h-80" />
 		</div>
 	);
 }

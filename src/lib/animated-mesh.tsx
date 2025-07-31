@@ -17,9 +17,9 @@ import { Vector3 } from "three";
  *
  * ### How It Works
  *
- * 1.  **Global State (`window.sharedMeshState`):** A single object on the `window`
- *     stores the mesh's current `position` and `scale`. This state persists
- *     across page loads, acting as the single source of truth for the animation.
+ * 1.  **Global State (`window.sharedMeshStates`):** A `Map` on the `window` object
+ *     stores the state for each animated mesh, keyed by its unique `id`. This
+ *     allows for multiple independent animations and persists state across page loads.
  *
  * 2.  **Persistent Mesh (`useCanvas`):** We use `r3f-scroll-rig`'s `useCanvas` hook
  *     with a shared `key` (`id`) and `dispose: false`. This ensures the same `mesh`
@@ -43,27 +43,33 @@ import { Vector3 } from "three";
  */
 
 // --- 1. Global State ---
+type SharedMeshState = {
+	position: Vector3;
+	scale: Vector3;
+	animationId: number;
+};
+
 declare global {
 	interface Window {
-		sharedMeshState?: {
-			// Using screen-space pixel coordinates for position and scale
-			// ensures accuracy across different scroll positions and layouts.
-			position: Vector3;
-			scale: Vector3;
-			animationId: number;
-		};
+		// Use a Map to store state for multiple elements, keyed by their unique ID.
+		sharedMeshStates?: Map<string, SharedMeshState>;
 	}
 }
 
-function getSharedMeshState() {
-	if (!window.sharedMeshState) {
-		window.sharedMeshState = {
+function getSharedMeshState(id: string): SharedMeshState {
+	if (!window.sharedMeshStates) {
+		window.sharedMeshStates = new Map();
+	}
+
+	if (!window.sharedMeshStates.has(id)) {
+		// If no state exists for this ID, create a new one.
+		window.sharedMeshStates.set(id, {
 			position: new Vector3(0, 0, 0),
 			scale: new Vector3(1, 1, 1),
 			animationId: 0,
-		};
+		});
 	}
-	return window.sharedMeshState;
+	return window.sharedMeshStates.get(id)!;
 }
 
 // --- 3. DOM-based Positioning ---
@@ -99,7 +105,8 @@ function AnimatedMesh({
 		autoUpdate: true,
 	});
 
-	const sharedState = getSharedMeshState();
+	// Get the state for this specific mesh from the global Map.
+	const sharedState = getSharedMeshState(id);
 	const { requestRender } = useScrollRig();
 
 	// --- 2. Persistent Mesh ---
