@@ -1,44 +1,19 @@
-import { ScrollScene, UseCanvas } from "@14islands/r3f-scroll-rig";
+import { AnimatedElement } from "@/lib/animated-mesh";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import type { RefObject } from "react";
-import { useRef } from "react";
 
 export const Route = createFileRoute("/")({
 	component: App,
 });
 
 function App() {
-	const track = useRef<HTMLDivElement>(null!);
-
 	return (
-		<div className="min-h-svh flex gap-4 flex-col justify-center items-center z-50 relative">
-			<div />
+		<div className="min-h-svh flex gap-4 flex-col justify-center items-center z-50 relative border border-red-500 h-[2000px]">
 			<Link to="/pageb">
-				<div ref={track} className="w-52 h-52 border border-white" />
-				<PersistentScrollScene id="pageb" track={track} />
+				<AnimatedElement
+					id="shared-element"
+					className="w-20 h-20 absolute top-[1000px] left-0"
+				/>
 			</Link>
 		</div>
-	);
-}
-
-export function PersistentScrollScene({
-	id,
-	track,
-}: {
-	id: string;
-	track: RefObject<HTMLElement>;
-}) {
-	return (
-		// Id: when added blue mesh does not appear
-		<UseCanvas dispose={false} id={id}>
-			<ScrollScene track={track}>
-				{(props) => (
-					<mesh {...props}>
-						<planeGeometry />
-						<meshBasicMaterial color="blue" />
-					</mesh>
-				)}
-			</ScrollScene>
-		</UseCanvas>
 	);
 }

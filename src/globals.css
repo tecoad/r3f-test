@@ -5,4 +5,8 @@
 	body {
 		@apply min-h-svh antialiased bg-black text-white;
 	}
+	/* ::view-transition-group(*) {
+		animation-duration: 2s;
+		animation-timing-function: ease-out;
+	} */
 }

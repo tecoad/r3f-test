@@ -1,22 +1,37 @@
-import { PersistentScrollScene } from "@/routes";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { AnimatedElement } from "@/lib/animated-mesh";
+import {
+	createFileRoute,
+	useCanGoBack,
+	useRouter,
+} from "@tanstack/react-router";
 
 export const Route = createFileRoute("/pageb")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const track = useRef<HTMLDivElement>(null!);
+	const canGoBack = useCanGoBack();
+	const router = useRouter();
+
+	const handleClick = () => {
+		if (canGoBack) {
+			router.history.back();
+		} else {
+			router.navigate({ to: "/" });
+		}
+	};
 
 	return (
 		<div className=" min-h-svh flex gap-4 flex-col justify-center items-center z-50 relative">
-			<Link to="/" className="text-white hover:text-blue-500 underline">
+			<button
+				type="button"
+				onClick={handleClick}
+				className="text-white hover:text-blue-500 underline"
+			>
 				Return
-			</Link>
+			</button>
 
-			<div ref={track} className="w-lg h-80 border border-white" />
-			<PersistentScrollScene id="pageb" track={track} />
+			<AnimatedElement id="shared-element" className="w-lg h-80" />
 		</div>
 	);
 }

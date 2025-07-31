@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@14islands/r3f-scroll-rig": "^8.15.0",
+    "@react-spring/three": "^10.0.1",
+    "@react-three/drei": "^10.6.1",
     "@react-three/fiber": "^9.3.0",
     "@tanstack/react-router": "^1.130.2",
     "@tanstack/react-router-devtools": "^1.130.2",
